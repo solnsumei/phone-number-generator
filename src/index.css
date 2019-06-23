@@ -5,9 +5,95 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #33392D;
+  font-size: 100%;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.app-header h2 {
+  text-align: center;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 10px;
+  width: 95%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.text-off-white {
+ color: #F7EABE;
+}
+
+.phone-numbers {
+  background-color: antiquewhite;
+  border-radius: 5px;
+  margin: 10px auto;
+}
+
+.phone-numbers p {
+  margin: 10px;
+  padding: 10px;
+  justify-items: center;
+}
+
+.numbers {
+  font-size: 13px;
+}
+
+.button-div {
+  clear: both;
+  margin: 10px auto;
+  text-align: center;
+}
+
+.generate-btn {
+  margin: 10px;
+  height: 50px;
+  background-color: #FFF;
+  border: 2px solid #33392D;
+  color: #33392D;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: auto;
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.sort-buttons, .download {
+  width: 50%;
+  float: left;
+  margin-bottom: 10px;
+}
+
+.download {
+  text-align: right;
+}
+
+.download > a {
+  color: #F7EABE;
+}
+
+.btn {
+  border: none;
+  background-color: #FFF;
+  color:#33392D;
+  padding: 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 4px;
+}
+
