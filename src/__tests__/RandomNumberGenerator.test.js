@@ -34,12 +34,12 @@ describe('SortButtonAndDwonloadLink Component', () => {
     wrapper.find('button').at(0).simulate('click');
     expect(wrapper.find('SortButtonsAndDownloadLink')).toHaveLength(1);
     expect(wrapper.instance().state.phoneNumbers.length).toBe(300);
-    expect(wrapper.find('p').at(0).text()).not.toBe('Generated phone numbers will show here');
+    expect(wrapper.find('p').at(1).text()).not.toBe('Generated phone numbers will show here');
     
     wrapper.find('button').at(0).simulate('click');
     expect(wrapper.find('SortButtonsAndDownloadLink')).toHaveLength(0);
     expect(wrapper.instance().state.phoneNumbers.length).toBe(0);
-    expect(wrapper.find('p').at(0).text()).toBe('Generated phone numbers will show here');
+    expect(wrapper.find('p').at(1).text()).toBe('Generated phone numbers will show here');
     expect(spy).toHaveBeenCalled();
   });
 

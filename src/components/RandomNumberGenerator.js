@@ -1,9 +1,13 @@
 import React from 'react';
+import {
+  getTotalNumberOfGeneratedPhoneNumbers,
+  setTotalNumberOfGeneratedPhoneNumbers } from '../utils/helpers';
 import SortButtonsAndDownloadLink from './SortButtonsAndDownloadLink'
 
 class RandomNumberGenerator  extends React.Component {
 
   state = {
+    totalCount: getTotalNumberOfGeneratedPhoneNumbers(),
     phoneNumbers: [],
     phoneNumbersString: null,
     fileName: null,
@@ -26,7 +30,7 @@ class RandomNumberGenerator  extends React.Component {
     });
   };
 
-  sortNumbers = (phoneNumberArr, sortType) => {
+  sortNumbers = (phoneNumberArr, sortType, totalCount) => {
     const sortedNumbers = phoneNumberArr
       .sort((a, b) => (sortType === 'desc' ? (b - a) : (a - b)));
     
@@ -59,14 +63,24 @@ class RandomNumberGenerator  extends React.Component {
       number -= 1;
     }
 
-    return this.sortNumbers(phoneNumbers, 'asc');
+    const totalCount = setTotalNumberOfGeneratedPhoneNumbers(phoneNumbers.length);
+    this.setState({
+      totalCount,
+    })
+    return this.sortNumbers(phoneNumbers, 'asc', totalCount);
   }
 
   render() {
-    const { phoneNumbers, phoneNumbersString, link, fileName } =  this.state;
+    const {
+      totalCount,
+      phoneNumbers,
+      phoneNumbersString,
+      link,
+      fileName } =  this.state;
 
     return (
       <div className="container">
+        <p className="text-off-white">Total Numbers Generated: {totalCount}</p>
         <div className="phone-numbers" id="phone-numbers-div">
           <p className={phoneNumbersString ? 'align-left numbers' : 'text-center'}>
             {
@@ -92,7 +106,7 @@ class RandomNumberGenerator  extends React.Component {
             ? <button
                 onClick={() => this.reset()}
                 className="generate-btn"
-                > Reset
+                > Clear
               </button>
             : <button
                 onClick={() => this.generateNumbers()}
