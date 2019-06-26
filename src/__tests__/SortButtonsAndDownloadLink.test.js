@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import SortButtonsAndDownloadLink from '../components/SortButtonsAndDownloadLink';
 
 
-describe('SortButtonAndDwonloadLink Component', () => {
+describe('SortButtonAndDownloadLink Component', () => {
   it('renders without crashing', () => {
     const wrapper = shallow(<SortButtonsAndDownloadLink />);
     expect(wrapper).toBeDefined();

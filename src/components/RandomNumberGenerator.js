@@ -2,7 +2,8 @@ import React from 'react';
 import {
   getTotalNumberOfGeneratedPhoneNumbers,
   setTotalNumberOfGeneratedPhoneNumbers } from '../utils/helpers';
-import SortButtonsAndDownloadLink from './SortButtonsAndDownloadLink'
+import SortButtonsAndDownloadLink from './SortButtonsAndDownloadLink';
+import UserInputForm from './UserInputForm';
 
 class RandomNumberGenerator  extends React.Component {
 
@@ -12,6 +13,7 @@ class RandomNumberGenerator  extends React.Component {
     phoneNumbersString: null,
     fileName: null,
     link: null,
+    numberOfItemsToGenerate: '',
   };
 
   showGeneratedPhoneNumbers = (phoneNumbers) => {
@@ -27,12 +29,20 @@ class RandomNumberGenerator  extends React.Component {
       phoneNumbers,
       fileName,
       link,
+      numberOfItemsToGenerate: '',
     });
   };
 
-  sortNumbers = (phoneNumberArr, sortType, totalCount) => {
+  sortNumbers = (phoneNumberArr, sortType, isNew=false) => {
     const sortedNumbers = phoneNumberArr
       .sort((a, b) => (sortType === 'desc' ? (b - a) : (a - b)));
+
+    if (isNew) {
+      this.setState({
+        minNumberGenerated: sortedNumbers[0],
+        maxNumberGenerated: sortedNumbers[phoneNumberArr.length - 1]
+      });
+    }
     
     return this.showGeneratedPhoneNumbers(sortedNumbers);
   }
@@ -43,11 +53,22 @@ class RandomNumberGenerator  extends React.Component {
       phoneNumbers: [],
       fileName: null,
       link: null,
+      maxNumberGenerated: null,
+      minNumberGenerated: null,
+    });
+  }
+
+  handleChange = (event) => {
+    this.setState({
+      numberOfItemsToGenerate: event.target.value,
     });
   }
     
-  generateNumbers = () => {
-    let number = 300;
+  generateNumbers = (event) => {
+    event.preventDefault();
+
+    const { numberOfItemsToGenerate } = this.state;
+    let number = parseInt(numberOfItemsToGenerate);
     let phoneNumbers = [];
 
     while (number > 0) {
@@ -67,7 +88,7 @@ class RandomNumberGenerator  extends React.Component {
     this.setState({
       totalCount,
     })
-    return this.sortNumbers(phoneNumbers, 'asc', totalCount);
+    return this.sortNumbers(phoneNumbers, 'asc', true);
   }
 
   render() {
@@ -75,22 +96,35 @@ class RandomNumberGenerator  extends React.Component {
       totalCount,
       phoneNumbers,
       phoneNumbersString,
+      numberOfItemsToGenerate,
+      maxNumberGenerated,
+      minNumberGenerated,
       link,
       fileName } =  this.state;
 
     return (
       <div className="container">
-        <p className="text-off-white">Total Numbers Generated: {totalCount}</p>
-        <div className="phone-numbers" id="phone-numbers-div">
-          <p className={phoneNumbersString ? 'align-left numbers' : 'text-center'}>
-            {
-              phoneNumbersString 
-                ? phoneNumbersString
-              : 'Generated phone numbers will show here'
-            }
-          </p>
-        </div>
-
+        <p className="text-off-white">
+          <span>Total Numbers Generated: <strong>{totalCount}</strong></span>
+          { phoneNumbersString 
+            &&  <small className="float-right">
+                  Minimum Number Generated: <strong>{minNumberGenerated}</strong>,
+                  Maximum Number Generated: <strong>{maxNumberGenerated}</strong> 
+                </small>
+          }
+        </p>
+        {
+          phoneNumbersString
+          ? <div className="phone-numbers" id="phone-numbers-div">
+              <p className='align-left numbers'>{phoneNumbersString}</p>
+            </div>
+          : <UserInputForm
+              onSubmit={(e) => this.generateNumbers(e)}
+              onChange={(e) => this.handleChange(e)}
+              value={numberOfItemsToGenerate}
+            />
+        }
+        
         {
           phoneNumbersString 
           && <SortButtonsAndDownloadLink
@@ -103,15 +137,10 @@ class RandomNumberGenerator  extends React.Component {
 
         <div className="button-div">
           {phoneNumbersString 
-            ? <button
+          && <button
                 onClick={() => this.reset()}
                 className="generate-btn"
-                > Clear
-              </button>
-            : <button
-                onClick={() => this.generateNumbers()}
-                className="generate-btn"
-                > Generate Random Phone Numbers
+                > Reset
               </button>
           }
         </div>

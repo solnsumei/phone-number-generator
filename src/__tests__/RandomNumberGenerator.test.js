@@ -1,28 +1,32 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import RandomNumberGenerator from '../components/RandomNumberGenerator';
-import SortButtonsAndDownloadLink from '../components/SortButtonsAndDownloadLink';
 
 
-describe('SortButtonAndDwonloadLink Component', () => {
+describe('Random Number Generator Test Component', () => {
   it('renders without crashing', () => {
     const wrapper = shallow(<RandomNumberGenerator />);
     expect(wrapper).toBeDefined();
     expect(wrapper.getElement().type).toBe('div');
     expect(wrapper.find('SortButtonsAndDownloadLink')).toHaveLength(0);
-    expect(wrapper.find('button')).toHaveLength(1);
+    expect(wrapper.find('UserInputForm')).toHaveLength(1);
+    expect(wrapper.find('button')).toHaveLength(0);
   });
 
-  it('should show phoneNumbers and sort buttons when generate button is clicked', () => {
+  it('should show phoneNumbers and sort buttons when form is submitted', () => {
     const wrapper = shallow(<RandomNumberGenerator />);
 
     const spy = jest.spyOn(wrapper.instance(), 'generateNumbers');
+    wrapper.instance().setState({
+      numberOfItemsToGenerate: 200,
+    });
 
-    wrapper.find('button').at(0).simulate('click');
+    wrapper.find('UserInputForm').dive().find('form').simulate('submit', {
+      preventDefault:  () => {}
+    });
     expect(wrapper.find('SortButtonsAndDownloadLink')).toHaveLength(1);
-    expect(wrapper.instance().state.phoneNumbers.length).toBe(300);
+    expect(wrapper.instance().state.phoneNumbers.length).toBe(200);
     expect(wrapper.instance().state.phoneNumbersString).not.toBe(null);
-    expect(wrapper.find('p').at(0).text()).not.toBe('Generated phone numbers will show here');
     expect(spy).toHaveBeenCalled();
   });
 
@@ -31,15 +35,21 @@ describe('SortButtonAndDwonloadLink Component', () => {
 
     const spy = jest.spyOn(wrapper.instance(), 'reset');
 
-    wrapper.find('button').at(0).simulate('click');
+    wrapper.instance().setState({
+      numberOfItemsToGenerate: 200,
+    });
+
+    wrapper.find('UserInputForm').dive().find('form').simulate('submit', {
+      preventDefault: () => {}
+    });
     expect(wrapper.find('SortButtonsAndDownloadLink')).toHaveLength(1);
-    expect(wrapper.instance().state.phoneNumbers.length).toBe(300);
-    expect(wrapper.find('p').at(1).text()).not.toBe('Generated phone numbers will show here');
+    expect(wrapper.instance().state.phoneNumbers.length).toBe(200);
+    expect(wrapper.find('p')).toHaveLength(2);
     
     wrapper.find('button').at(0).simulate('click');
     expect(wrapper.find('SortButtonsAndDownloadLink')).toHaveLength(0);
     expect(wrapper.instance().state.phoneNumbers.length).toBe(0);
-    expect(wrapper.find('p').at(1).text()).toBe('Generated phone numbers will show here');
+    expect(wrapper.find('p')).toHaveLength(1);
     expect(spy).toHaveBeenCalled();
   });
 
@@ -47,8 +57,13 @@ describe('SortButtonAndDwonloadLink Component', () => {
     const wrapper = shallow(<RandomNumberGenerator />);
     const spy = jest.spyOn(wrapper.instance(), 'sortNumbers');
 
-    wrapper.find('button').at(0).simulate('click');
-    expect(wrapper.instance().state.phoneNumbers.length).toBe(300);
+    wrapper.instance().setState({
+      numberOfItemsToGenerate: 200,
+    });
+
+    wrapper.find('UserInputForm').dive().find('form').simulate('submit', {
+      preventDefault: () => { }
+    });
 
     wrapper.find('SortButtonsAndDownloadLink').dive().find('button').at(1).simulate('click');
     expect(spy).toHaveBeenCalled();
@@ -58,8 +73,13 @@ describe('SortButtonAndDwonloadLink Component', () => {
     const wrapper = shallow(<RandomNumberGenerator />);
     const spy = jest.spyOn(wrapper.instance(), 'sortNumbers');
 
-    wrapper.find('button').at(0).simulate('click');
-    expect(wrapper.instance().state.phoneNumbers.length).toBe(300);
+    wrapper.instance().setState({
+      numberOfItemsToGenerate: 200,
+    });
+
+    wrapper.find('UserInputForm').dive().find('form').simulate('submit', {
+      preventDefault: () => { }
+    });
 
     wrapper.find('SortButtonsAndDownloadLink').dive().find('button').at(0).simulate('click');
     expect(spy).toHaveBeenCalled();
